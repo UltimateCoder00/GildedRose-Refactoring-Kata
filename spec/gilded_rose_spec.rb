@@ -1,8 +1,14 @@
 require 'gilded_rose'
 
-# require File.join(File.dirname(__FILE__), 'gilded_rose')
-
 describe GildedRose do
+
+  subject(:gilded_rose) {described_class.new(item)}
+
+  let(:item) { double(:item, name: name, sell_in: sell_in, quality: quality) }
+
+  let(:name) {"Aged Brie"}
+  let(:sell_in) {5}
+  let(:quality) {10}
 
   describe "#update_quality" do
     it "does not change the name" do
