@@ -5,4 +5,5 @@ source "https://rubygems.org"
 group :test, :development do
   gem 'rspec'
   gem 'coveralls', require: false
+  gem 'pry'
 end

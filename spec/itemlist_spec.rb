@@ -1,30 +1,30 @@
 require 'itemlist'
 
-describe Item do
+describe ItemList do
 
-  subject(:item) {described_class.new(name, sell_in, quality)}
+  subject(:itemlist) {described_class.new}
 
+  let(:item) { double(:item, name: name, sell_in: sell_in, quality: quality) }
   let(:name) {"Aged Brie"}
   let(:sell_in) {5}
   let(:quality) {10}
 
   describe "Initialization" do
-    it "checks items name" do
-      expect(item.name).to eq "#{name}"
-    end
-
-    it "checks items expiry date" do
-      expect(item.sell_in).to eq sell_in
-    end
-
-    it "checks items quality" do
-      expect(item.quality).to eq quality
+    it "checks items is empty" do
+      expect(itemlist.items).to eq []
     end
   end
 
-  describe "#to_s" do
-    it "displays items name, expiry date and quality" do
-      expect(item.to_s).to eq "#{name}, #{sell_in}, #{quality}"
+  describe "#add_item" do
+    it "adds item to the list" do
+      expect(itemlist.add_item(item)).to eq [item]
+    end
+  end
+
+  describe "#remove_item" do
+    it "removes item from the list" do
+      itemlist.add_item(item)
+      expect(itemlist.remove_item(item)).to eq item
     end
   end
 

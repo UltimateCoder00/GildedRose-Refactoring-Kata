@@ -22,6 +22,20 @@ describe Item do
     end
   end
 
+  describe "Change item details" do
+    it "#name" do
+      expect(item.name=("Sulfuras")).to eq "Sulfuras"
+    end
+
+    it "#sell_in" do
+      expect(item.sell_in=(10)).to eq 10
+    end
+
+    it "#quality" do
+      expect(item.quality=(20)).to eq 20
+    end
+  end
+
   describe "#to_s" do
     it "displays items name, expiry date and quality" do
       expect(item.to_s).to eq "#{name}, #{sell_in}, #{quality}"
