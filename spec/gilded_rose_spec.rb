@@ -2,20 +2,86 @@ require 'gilded_rose'
 
 describe GildedRose do
 
-  subject(:gilded_rose) {described_class.new(item)}
+  subject(:gilded_rose) {described_class.new(items)}
 
-  let(:item) { double(:item, name: name, sell_in: sell_in, quality: quality) }
-
-  let(:name) {"Aged Brie"}
-  let(:sell_in) {5}
-  let(:quality) {10}
+  let(:items) {
+                [
+                  Item.new(name="Dexterity Vest", sell_in=0, quality=20),
+                  Item.new(name="Aged Brie", sell_in=2, quality=0),
+                  Item.new(name="Sulfuras, Hand of Ragnaros", sell_in=5, quality=80),
+                  Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=15, quality=20),
+                  Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=20),
+                  Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=20),
+                  Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=0, quality=20),
+                  Item.new(name="Conjured Mana Cake", sell_in=3, quality=6)
+                ]
+              }
 
   describe "#update_quality" do
-    it "does not change the name" do
-      items = [Item.new("foo", 0, 0)]
-      GildedRose.new(items).update_quality()
-      expect(items[0].name).to eq "fixme"
+
+    before do
+      gilded_rose.update_quality()
     end
+
+    it "does not change the name" do
+      expect{ gilded_rose.update_quality() }.to_not change { items[0].name }
+    end
+
+    it "decreases the quality twices the amount when sell_in=0" do
+      expect{ gilded_rose.update_quality() }.to change { items[0].quality }.by(-2)
+    end
+
+    it "checks the quality is greater than 0" do
+      expect(items[0].quality).to be > 0
+    end
+
+    it "checks quality max is 50" do
+      expect(items[0].quality).to be < 50
+    end
+
+    describe "Aged Brie" do
+      context "increases quality as sell_in decreases" do
+        it "sell_in decreases" do
+          expect{ gilded_rose.update_quality() }.to change { items[1].sell_in }.by(-1)
+        end
+
+        it "quality increases" do
+          expect{ gilded_rose.update_quality() }.to change { items[1].quality }.by(1)
+        end
+      end
+    end
+
+    describe "Sulfuras" do
+      it "checks that sell_in and quality does not change" do
+        expect{ gilded_rose.update_quality() }.to change { items[2].sell_in }.by(0)
+        expect{ gilded_rose.update_quality() }.to change { items[2].quality }.by(0)
+      end
+    end
+
+    describe "Backstage passes" do
+      it "changes the quality by normal amount when sell_in>10" do
+        expect{ gilded_rose.update_quality() }.to change { items[3].quality }.by(1)
+      end
+
+      it "changes the quality by twice the amount when sell_in<=10" do
+        expect{ gilded_rose.update_quality() }.to change { items[4].quality }.by(2)
+      end
+
+      it "changes the quality by three times the amount when sell_in<=5" do
+        expect{ gilded_rose.update_quality() }.to change { items[5].quality }.by(3)
+      end
+
+      it "changes quality to quality=0 when sell_in=0" do
+        expect{ gilded_rose.update_quality() }.to change { items[6].quality }.by(items[6].quality)
+      end
+    end
+
+    describe "Conjured" do
+      it "changes the quality by twice the normal amount" do
+        expect{ gilded_rose.update_quality() }.to change { items[7].quality }.by(-2)
+      end
+    end
+
   end
 
 end
