@@ -25,20 +25,20 @@ describe BackStagePasses do
   end
 
   describe "#change_quality" do
-    it "decreases the quality" do
-      expect(backstage_passes.change_quality).to eq quality - BackStagePasses::QUALITY_CHANGE
+    it "decreases the quality by 1 when sell_in>10" do
+      expect{ backstage_passes.change_quality }.to change { backstage_passes.quality }.by(BackStagePasses::QUALITY_CHANGE)
     end
 
     it "decreases the quality by 2 when sell_in<=10" do
-      expect(backstage_passes2.change_quality).to eq quality - (BackStagePasses::QUALITY_CHANGE)*2
+      expect{ backstage_passes2.change_quality }.to change { backstage_passes2.quality }.by((BackStagePasses::QUALITY_CHANGE * 2))
     end
 
     it "decreases the quality by 3 when sell_in<=5" do
-      expect(backstage_passes3.change_quality).to eq quality - (BackStagePasses::QUALITY_CHANGE)*3
+      expect{ backstage_passes3.change_quality }.to change { backstage_passes3.quality }.by((BackStagePasses::QUALITY_CHANGE * 3))
     end
 
     it "decreases the quality to 0  when sell_in<=0" do
-      expect(backstage_passes4.change_quality).to eq 0
+      expect{ backstage_passes4.change_quality }.to change { backstage_passes4.quality }.by(-(backstage_passes4.quality))
     end
   end
 

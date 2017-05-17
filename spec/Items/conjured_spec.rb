@@ -14,7 +14,7 @@ describe Conjured do
 
   describe "#change_quality" do
     it "decreases the quality by 2" do
-      expect(conjured.change_quality).to eq quality - Conjured::QUALITY_CHANGE
+      expect{ conjured.change_quality }.to change { conjured.quality }.by(-Conjured::QUALITY_CHANGE)
     end
   end
 

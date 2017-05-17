@@ -15,11 +15,11 @@ class BackStagePasses < Item
     if @sell_in <= 0
       @quality = 0
     elsif @sell_in <= 5
-      @quality = @quality - (QUALITY_CHANGE * 3)
+      @quality = @quality + (QUALITY_CHANGE * 3)
     elsif @sell_in <= 10
-      @quality = @quality - (QUALITY_CHANGE * 2)
+      @quality = @quality + (QUALITY_CHANGE * 2)
     else
-      @quality = @quality - QUALITY_CHANGE
+      @quality = @quality + QUALITY_CHANGE
     end
   end
 end

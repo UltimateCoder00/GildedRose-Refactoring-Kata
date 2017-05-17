@@ -13,67 +13,26 @@ class Quality
         item.sell_in -= 1
       end
 
-      # if item_is_sulfuras?(item.name)
-      #
-      # elsif item_is_aged_brie?(item.name)
-      #
-      # elsif item_is_backstage_passed?(item.name)
-      #
-      # elsif item_is_conjured?(item.name)
-      #   item.quality = Conjured.new(item.quality).change_quality
-      # else
-      #
-      # end
+      twice_decrease_speed = 1
 
-      if item_is_conjured?(item.name)
-        item.quality = Conjured.new(item.quality).change_quality
-      elsif item_is_backstage_passed?(item.name)
-        item.quality = BackStagePasses.new(item.sell_in, item.quality).change_quality
+      if item.sell_in <= 0
+        twice_decrease_speed = 2
       end
 
+      if item_is_conjured?(item.name)
+        item.quality = Conjured.new(item.quality).change_quality * twice_decrease_speed
+      elsif item_is_backstage_passed?(item.name)
+        item.quality = BackStagePasses.new(item.sell_in, item.quality).change_quality * twice_decrease_speed
+      elsif item_is_aged_brie?(item.name)
+        item.quality = AgedBrie.new(item.quality).change_quality
+      elsif item_is_sulfuras?(item.name)
 
+      else
+        item.quality -= (1 * twice_decrease_speed)
+      end
 
-
-      unless item_is_sulfuras?(item.name)
-
-        if item_is_aged_brie?(item.name) || item_is_backstage_passed?(item.name)
-
-          item.quality += 1
-
-          if item_is_backstage_passed?(item.name)
-            if item.sell_in < 11
-              item.quality += 1
-            end
-
-            if item.sell_in < 6
-              item.quality += 1
-            end
-
-            if item.quality > 50
-              item.quality = 50
-            end
-
-            if item.sell_in < 0
-              item.quality = 0
-            end
-          else
-            if item.sell_in < 0
-              item.quality += 1
-            end
-          end
-
-          if item.sell_in < 0
-            item.quality = 0
-          end
-
-        else
-          item.quality -= 1
-
-          if item.sell_in < 0
-            item.quality -= 1
-          end
-
-        end
+      if item.quality > 50
+        item.quality = 50 unless item_is_sulfuras?(item.name)
       end
     end
   end
