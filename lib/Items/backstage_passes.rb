@@ -12,14 +12,22 @@ class BackStagePasses < Item
   end
 
   def change_quality
-    if @sell_in <= 0
-      @quality = 0
-    elsif @sell_in <= 5
-      @quality = @quality + (QUALITY_CHANGE * 3)
+    @sell_in <= 0 ? 0 : quality_more_than_50?
+  end
+
+  private
+
+  def quality_change_factor
+    if @sell_in <= 5
+      QUALITY_CHANGE * 3
     elsif @sell_in <= 10
-      @quality = @quality + (QUALITY_CHANGE * 2)
+      QUALITY_CHANGE * 2
     else
-      @quality = @quality + QUALITY_CHANGE
+      QUALITY_CHANGE
     end
+  end
+
+  def quality_more_than_50?
+    @quality + (QUALITY_CHANGE * quality_change_factor ) > 50 ? 50 : @quality + (QUALITY_CHANGE * quality_change_factor )
   end
 end

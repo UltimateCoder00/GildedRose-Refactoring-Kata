@@ -7,16 +7,10 @@ class AgedBrie < Item
   QUALITY_CHANGE = ITEM_QUALITY_CHANGE_VALUE
 
   def initialize(quality)
-    @quality = quality
+    @quality = quality + QUALITY_CHANGE
   end
 
   def change_quality
-    @quality = @quality + QUALITY_CHANGE
-
-    if @quality > 50
-      @quality = 50
-    else
-      @quality
-    end
+    @quality > 50 ? 50 : @quality
   end
 end
