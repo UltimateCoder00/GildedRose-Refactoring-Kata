@@ -1,13 +1,7 @@
 class Quality
 
-  CHANGE_AMOUNT = {
-    aged_brie: {quality_change: 1},
-    sulfuras: {quality_change: 0},
-    backstage_passes: {quality_change: 1},
-    conjured: {quality_change: -1}
-  }
-
   ITEM_MAX_QUALITY = 50
+  QUALITY_CHANGE = 1
 
   def initialize(items)
     @items = items
@@ -15,9 +9,32 @@ class Quality
 
   def change()
     @items.each do |item|
-      unless item_is_sulfuras?(item.name) || item.quality == ITEM_MAX_QUALITY
-
+      unless item_is_sulfuras?(item.name)
         item.sell_in -= 1
+      end
+
+      # if item_is_sulfuras?(item.name)
+      #
+      # elsif item_is_aged_brie?(item.name)
+      #
+      # elsif item_is_backstage_passed?(item.name)
+      #
+      # elsif item_is_conjured?(item.name)
+      #   item.quality = Conjured.new(item.quality).change_quality
+      # else
+      #
+      # end
+
+      if item_is_conjured?(item.name)
+        item.quality = Conjured.new(item.quality).change_quality
+      elsif item_is_backstage_passed?(item.name)
+        item.quality = BackStagePasses.new(item.sell_in, item.quality).change_quality
+      end
+
+
+
+
+      unless item_is_sulfuras?(item.name)
 
         if item_is_aged_brie?(item.name) || item_is_backstage_passed?(item.name)
 
@@ -30,6 +47,10 @@ class Quality
 
             if item.sell_in < 6
               item.quality += 1
+            end
+
+            if item.quality > 50
+              item.quality = 50
             end
 
             if item.sell_in < 0
@@ -48,10 +69,6 @@ class Quality
         else
           item.quality -= 1
 
-          if item_is_conjured?(item.name)
-            item.quality -= 1
-          end
-
           if item.sell_in < 0
             item.quality -= 1
           end
@@ -64,7 +81,7 @@ class Quality
   private
 
   def item_is_sulfuras?(name)
-    name == "Sulfuras, Hand of Ragnaros"
+    name == "Sulfuras"
   end
 
   def item_is_aged_brie?(name)
@@ -72,10 +89,10 @@ class Quality
   end
 
   def item_is_backstage_passed?(name)
-    name == "Backstage passes to a TAFKAL80ETC concert"
+    name == "Backstage passes"
   end
 
   def item_is_conjured?(name)
-    name == "Conjured Mana Cake"
+    name == "Conjured"
   end
 end

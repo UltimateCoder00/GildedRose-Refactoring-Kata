@@ -8,33 +8,26 @@ describe GildedRose do
                 [
                   Item.new(name="Dexterity Vest", sell_in=0, quality=20),
                   Item.new(name="Aged Brie", sell_in=2, quality=0),
-                  Item.new(name="Sulfuras, Hand of Ragnaros", sell_in=5, quality=80),
-                  Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=15, quality=20),
-                  Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=20),
-                  Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=20),
-                  Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=0, quality=20),
-                  Item.new(name="Conjured Mana Cake", sell_in=3, quality=6)
+                  Item.new(name="Sulfuras", sell_in=5, quality=80),
+                  Item.new(name="Backstage passes", sell_in=15, quality=20),
+                  Item.new(name="Backstage passes", sell_in=10, quality=20),
+                  Item.new(name="Backstage passes", sell_in=5, quality=20),
+                  Item.new(name="Backstage passes", sell_in=0, quality=20),
+                  Item.new(name="Backstage passes", sell_in=5, quality=49),
+                  Item.new(name="Conjured", sell_in=3, quality=6)
                 ]
               }
-  #
-  # let(:items) { ItemList.new }
 
   describe "#update_quality" do
 
     before do
-      # items.add_item(Item.new(name="Dexterity Vest", sell_in=0, quality=20))
-      # items.add_item(Item.new(name="Aged Brie", sell_in=2, quality=0))
-      # items.add_item(Item.new(name="Sulfuras, Hand of Ragnaros", sell_in=5, quality=80))
-      # items.add_item(Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=15, quality=20))
-      # items.add_item(Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=20))
-      # items.add_item(Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=20))
-      # items.add_item(Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=0, quality=20))
-      # items.add_item(Item.new(name="Conjured Mana Cake", sell_in=3, quality=6))
       gilded_rose.update_quality()
     end
 
     it "does not change the name" do
-      expect{ gilded_rose.update_quality() }.to_not change { items[0].name }
+      for i in 0..(items.length - 1)
+        expect{ gilded_rose.update_quality() }.to_not change { items[i].name }
+      end
     end
 
     it "decreases the quality twices the amount when sell_in=0" do
@@ -42,11 +35,15 @@ describe GildedRose do
     end
 
     it "checks the quality is greater than 0" do
-      expect(items[0].quality).to be > 0
+      for i in 0..(items.length - 1)
+        expect(items[i].quality).to be >= 0
+      end
     end
 
     it "checks quality max is 50" do
-      expect(items[0].quality).to be < 50
+      for i in 0..(items.length - 1)
+        expect(items[i].quality).to be <= 50 unless i == 2
+      end
     end
 
     describe "Aged Brie" do
@@ -88,7 +85,7 @@ describe GildedRose do
 
     describe "Conjured" do
       it "changes the quality by twice the normal amount" do
-        expect{ gilded_rose.update_quality() }.to change { items[7].quality }.by(-2)
+        expect{ gilded_rose.update_quality() }.to change { items[8].quality }.by(-2)
       end
     end
 
